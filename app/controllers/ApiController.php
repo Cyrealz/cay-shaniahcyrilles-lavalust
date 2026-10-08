@@ -275,7 +275,7 @@ class ApiController extends Controller
         $this->api->require_jwt();
         $this->api->rate_limit();
         $products = $this->db->raw(
-            'SELECT id, product_name, description, price, quantity, created_at, updated_at FROM products ORDER BY id DESC'
+            'SELECT id, product_name, description, price, quantity, created_at FROM products ORDER BY id DESC'
         )->fetchAll(PDO::FETCH_ASSOC);
         $this->api->respond($products);
     }
@@ -286,7 +286,7 @@ class ApiController extends Controller
         $this->require_admin();
         $product = $this->validated_product($this->api->body());
         $id = $this->db->raw(
-            'INSERT INTO products (product_name, description, price, quantity, created_at) VALUES (?, ?, ?, ?, NOW())',
+            'INSERT INTO products (product_name, description, price, quantity) VALUES (?, ?, ?, ?)',
             [$product['product_name'], $product['description'], $product['price'], $product['quantity']]
         );
         $this->api->respond([
@@ -307,7 +307,7 @@ class ApiController extends Controller
             $this->api->respond_error('Product not found', 404);
         }
         $this->db->raw(
-            'UPDATE products SET product_name = ?, description = ?, price = ?, quantity = ?, updated_at = NOW() WHERE id = ?',
+            'UPDATE products SET product_name = ?, description = ?, price = ?, quantity = ? WHERE id = ?',
             [$product['product_name'], $product['description'], $product['price'], $product['quantity'], $id]
         );
         $this->api->respond(['message' => 'Product updated']);
