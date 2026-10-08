@@ -27,4 +27,8 @@ RUN sed -i '/<Directory \/var\/www\/html\/public>/,/<\/Directory>/ s/AllowOverri
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-EXPOSE 80
+ENV PORT=10000
+
+EXPOSE 10000
+
+CMD ["sh", "-c", "sed -i \"s/Listen 80/Listen ${PORT:-10000}/\" /etc/apache2/ports.conf && sed -i \"s/:80>/:${PORT:-10000}>/\" /etc/apache2/sites-available/000-default.conf && exec apache2-foreground"]

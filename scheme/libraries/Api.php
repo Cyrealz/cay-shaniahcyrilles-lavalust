@@ -244,9 +244,9 @@ class Api
      */
     private function sanitize_input($data)
     {
-        array_walk_recursive($data, function(&$value) {
-            if (is_string($value)) {
-                $value = trim(htmlspecialchars($value, ENT_QUOTES, 'UTF-8'));
+        array_walk_recursive($data, function(&$value, $key) {
+            if (is_string($value) && $key !== 'password') {
+                $value = trim($value);
             }
         });
         return $data;
@@ -580,10 +580,22 @@ class Api
             $this->respond_error('Refresh token expired or revoked', 403);
         }
 
+        $user = $this->_lava->db->raw(
+            'SELECT id, role, is_active FROM users WHERE id = ? LIMIT 1',
+            [$payload['sub']]
+        )->fetch(PDO::FETCH_ASSOC);
+        if (!$user || (int) $user['is_active'] !== 1) {
+            $this->revoke_refresh_token($refresh_token);
+            $this->respond_error('Account is inactive or no longer exists', 401);
+        }
+
         // Revoke old + rotate (best practice)
         $this->revoke_refresh_token($refresh_token);
 
-        $new_tokens = $this->issue_tokens(['id' => $payload['sub']]);
+        $new_tokens = $this->issue_tokens([
+            'id' => $user['id'],
+            'role' => $user['role'],
+        ]);
 
         $this->respond([
             'message' => 'Tokens refreshed successfully',

@@ -1,67 +1,53 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
-class ProductModel extends Model
-{
+/**
+ * Model: ProductModel
+ * 
+ * Automatically generated via CLI.
+ */
+class ProductModel extends Model {
+    protected $table = '';
+    protected $primary_key = 'id';
+    protected $fillable = [];
+    protected $guarded = ['id'];
+
     public function __construct()
     {
         parent::__construct();
     }
 
-    // READ - Get all products
-    public function read()
-    {
-        return $this->db
-            ->table('products')
-            ->get_all();
+    public function read(){
+        return $this->db->table('products')->get_all();
     }
 
-    // READ - Get one product
-    public function find($id)
-    {
-        return $this->db
-            ->table('products')
-            ->where('id', $id)
-            ->get();
+    public function find($id){
+        return $this->db->table('products')->where('id', $id)->get();
     }
 
-    // CREATE
-    public function create($product_name, $description, $price, $quantity)
-    {
-        $data = [
+    public function create($product_name, $description, $price, $quantity){
+        $data = array(
             'product_name' => $product_name,
-            'description'  => $description,
-            'price'        => $price,
-            'quantity'     => $quantity
-        ];
+            'description' => $description,
+            'price' => $price,
+            'quantity' => $quantity
+        );
 
-        return $this->db
-            ->table('products')
-            ->insert($data);
+        $this->db->table('products')->insert($data);
     }
 
-    // UPDATE
-    public function update($id, $product_name, $description, $price, $quantity)
-    {
-        $data = [
+    public function update($id, $product_name, $description, $price, $quantity){
+        $data = array(
             'product_name' => $product_name,
-            'description'  => $description,
-            'price'        => $price,
-            'quantity'     => $quantity
-        ];
+            'description' => $description,
+            'price' => $price,
+            'quantity' => $quantity
+        );
 
-        return $this->db
-            ->table('products')
-            ->where('id', $id)
-            ->update($data);
+        return $this->db->table('products')->where('id', $id)->update($data);
     }
 
-    // DELETE
-    public function delete($id)
-    {
-        return $this->db
-            ->table('products')
-            ->where('id', $id)
-            ->delete();
+    public function delete($id){
+        return $this->db->table('products')->where('id', $id)->delete();
     }
 }

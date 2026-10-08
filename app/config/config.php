@@ -68,15 +68,6 @@ $config['environment'] = getenv('APP_ENV') ?: 'development';
 
 /*
 |--------------------------------------------------------------------------
-| Default Timezone
-|--------------------------------------------------------------------------
-| The default timezone will be used by the date functions of PHP.
-|
-*/
-$config['date_default_timezone'] = 'Asia/Manila';
-
-/*
-|--------------------------------------------------------------------------
 | Base Site URL
 |--------------------------------------------------------------------------
 |
@@ -99,6 +90,16 @@ $config['base_url'] 				= '';
 |
 */
 $config['proxy_enabled']           = FALSE;
+/*
+|--------------------------------------------------------------------------
+| Index File
+|--------------------------------------------------------------------------
+|
+| If you are using mod_rewrite to remove index.php in the URL set this
+| variable to blank.
+|
+*/
+$config['index_page']               = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -205,6 +206,7 @@ $config['404_override']       	    = '';
 |
 */
 $config['language'] 				= 'en-US';
+$config['date_default_timezone']    = getenv('APP_TIMEZONE') ?: 'Asia/Manila';
 
 /*
 |--------------------------------------------------------------------------

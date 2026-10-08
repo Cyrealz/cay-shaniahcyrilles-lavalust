@@ -9,17 +9,13 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 class ProductController extends Controller
 {
     public function __construct()
-{
-    parent::__construct();
-
-    $this->call->library('session');
-    $this->call->library('form_validation');
-    $this->call->model('ProductModel');
-}
+    {
+        parent::__construct();
+        $this->call->model('ProductModel');
+    }
 
     public function read()
     {
-
         $data['products'] = $this->ProductModel->read();
         $data['name'] = $this->session->userdata('user_role') ?: 'User';
         $data['user_role'] = $this->session->userdata('user_role');
